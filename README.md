@@ -8,28 +8,46 @@
 ## Description
 
 This project deploys a highly available WordPress site on AWS using Terraform
-(Infrastructure as Code).
+(Infrastructure as Code). The root stack under `main/` wires together networking,
+compute (ASG + ALB), RDS, ElastiCache, EFS, S3, CloudFront, IAM, and KMS.
 
 ## Prerequisites
 
-- Terraform v1.2.2 or later: <https://www.terraform.io/downloads/>
-- AWS CLI version 2:
+- **Terraform** `>= 1.7.0` (required for `terraform test` and lock/provider
+  constraints used in this repo):
+  <https://www.terraform.io/downloads/>
+- **AWS CLI** version 2:
   <https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html/>
 - Shell (sh) or PowerShell on Windows
 
+## Repository tooling (optional)
+
+From the repository root you can run:
+
+- **Markdown:** `npx markdownlint-cli2 "**/*.md"` (uses
+  `.markdownlint-cli2.yaml`, respects `.gitignore` so `.terraform/` is skipped)
+- **Terraform (stack in `main/`):** `terraform fmt -recursive`, `terraform
+  validate`, `terraform test` (see `main/stack.tftest.hcl`), and **TFLint** with
+  `.tflint.hcl`
+
+## CI
+
+GitHub Actions under `.github/workflows/` include **Terraform CI** (format,
+validate, lint, test on `.tf` / `.tftest.hcl` changes), plus **notify**,
+**infra-cost**, and **release** workflows.
+
 ## How to contribute
 
-Please see
-[how to contribute](https://github.com/hiimtung/wordpress_on_aws_with_terraform/blob/main/howtocontribute.md).
+See [how to contribute](howtocontribute.md).
 
 ## How to install and run
 
-- Install all prerequisites above.
+- Install the prerequisites above.
 
-- Deploy:
+- Deploy (from the cloned repository):
 
   ```bash
-  cd ~/wordpress-on-aws-with-terraform/main
+  cd main
   terraform init
   terraform plan
   terraform apply
@@ -41,6 +59,10 @@ Please see
   terraform destroy
   ```
 
+Configure the S3 backend and any secrets via your usual workflow (e.g.
+`terraform.tfvars`, environment variables, or CI variables); see `main/` and
+module `variables.tf` files for inputs.
+
 ## Architecture
 
 ![Architecture diagram](https://i.imgur.com/6aRdaTf.jpg)
@@ -51,49 +73,36 @@ Please see
 ├───📁 .github/
 │   └───📁 workflows/
 │       ├───📄 notify.yaml
-│       └───📄 infra-cost.yaml
-│       └───📄 release.yaml
+│       ├───📄 infra-cost.yaml
+│       ├───📄 release.yaml
+│       └───📄 terraform-ci.yaml
 ├───📁 modules/
 │   ├───📁 autoscaling/
-│   │   ├───📄 main.tf
-│   │   ├───📄 outputs.tf
-│   │   ├───📄 userdata.tftpl
-│   │   └───📄 variables.tf
+│   ├───📁 cloudfront/
 │   ├───📁 database/
-│   │   ├───📁 resources/
-│   │   │   └───...
-│   │   ├───📄 db-rotate.tf
-│   │   ├───📄 local.tf
-│   │   ├───📄 main.tf
-│   │   ├───📄 output.tf
-│   │   └───📄 variables.tf
 │   ├───📁 efs/
-│   │   ├───📄 main.tf
-│   │   ├───📄 outputs.tf
-│   │   └───📄 variables.tf
 │   ├───📁 elasticache/
-│   │   ├───📄 main.tf
-│   │   ├───📄 outputs.tf
-│   │   └───📄 variables.tf
+│   ├───📁 iam/
+│   ├───📁 kms/
 │   ├───📁 networking/
-│   │   ├───📄 main.tf
-│   │   ├───📄 outputs.tf
-│   │   └───📄 variables.tf
 │   └───📁 s3/
-│       ├───📄 main.tf
-│       ├───📄 outputs.tf
-│       └───📄 variables.tf
 ├───📁 main/
-│   ├───📄 locals.tf
 │   ├───📄 main.tf
-│   ├───📄 outputs.tf
 │   ├───📄 provider.tf
+│   ├───📄 variables.tf
+│   ├───📄 outputs.tf
+│   ├───📄 locals.tf
 │   ├───📄 README.md
-│   └───📄 variables.tf
+│   ├───📄 stack.tftest.hcl
+│   └───📄 .terraform.lock.hcl
 ├───📄 .editorconfig
 ├───📄 .gitignore
+├───📄 .markdownlint-cli2.yaml
+├───📄 .tflint.hcl
 ├───📄 howtocontribute.md
 ├───📄 README.md
 └───📄 repos.yaml
-
 ```
+
+Each module directory contains Terraform sources (for example `main.tf`,
+`variables.tf`, `outputs.tf`) and related files.
