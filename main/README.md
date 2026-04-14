@@ -11,8 +11,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0, < 6.0 |
-| <a name="provider_aws.us-east-1"></a> [aws.us-east-1](#provider\_aws.us-east-1) | >= 5.0, < 6.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.100.0 |
 
 ## Modules
 
@@ -70,16 +69,16 @@
 | <a name="input_db_username"></a> [db\_username](#input\_db\_username) | n/a | `string` | `"admin"` | no |
 | <a name="input_enabled_aurora"></a> [enabled\_aurora](#input\_enabled\_aurora) | Set true if use Aurora. Default is False | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Define the environment of resource, use for tagging | `string` | `"product"` | no |
-| <a name="input_lt_ami_name"></a> [lt\_ami\_name](#input\_lt\_ami\_name) | n/a | `list(string)` | <pre>[<br>  "amzn2-ami-kernel-5.10-hvm-2.0.20220606.1-x86_64-gp2"<br>]</pre> | no |
-| <a name="input_lt_ami_owner"></a> [lt\_ami\_owner](#input\_lt\_ami\_owner) | n/a | `list(string)` | <pre>[<br>  "137112412989"<br>]</pre> | no |
+| <a name="input_lt_ami_name"></a> [lt\_ami\_name](#input\_lt\_ami\_name) | n/a | `list(string)` | <pre>[<br/>  "amzn2-ami-kernel-5.10-hvm-2.0.20220606.1-x86_64-gp2"<br/>]</pre> | no |
+| <a name="input_lt_ami_owner"></a> [lt\_ami\_owner](#input\_lt\_ami\_owner) | n/a | `list(string)` | <pre>[<br/>  "137112412989"<br/>]</pre> | no |
 | <a name="input_lt_key_name"></a> [lt\_key\_name](#input\_lt\_key\_name) | n/a | `string` | `"wp-keypair"` | no |
-| <a name="input_nw_public_subnets"></a> [nw\_public\_subnets](#input\_nw\_public\_subnets) | List of Public subnets | `list(string)` | <pre>[<br>  "172.16.2.0/23",<br>  "172.16.4.0/23",<br>  "172.16.6.0/23"<br>]</pre> | no |
+| <a name="input_nw_public_subnets"></a> [nw\_public\_subnets](#input\_nw\_public\_subnets) | List of Public subnets | `list(string)` | <pre>[<br/>  "172.16.2.0/23",<br/>  "172.16.4.0/23",<br/>  "172.16.6.0/23"<br/>]</pre> | no |
 | <a name="input_nw_vpc_cidr"></a> [nw\_vpc\_cidr](#input\_nw\_vpc\_cidr) | VPC CIDR | `string` | `"172.16.0.0/16"` | no |
 | <a name="input_project"></a> [project](#input\_project) | Project name, use for tagging and naming resource | `string` | `"wptf"` | no |
 | <a name="input_region"></a> [region](#input\_region) | General | `string` | `"ap-southeast-1"` | no |
 | <a name="input_s3_acl"></a> [s3\_acl](#input\_s3\_acl) | n/a | `string` | `"private"` | no |
 | <a name="input_s3_bucket"></a> [s3\_bucket](#input\_s3\_bucket) | S3 | `string` | `"wordpress-s3-terraform"` | no |
-| <a name="input_ssh_whitelist"></a> [ssh\_whitelist](#input\_ssh\_whitelist) | Whitelist IP for SSH connection to EC2 instance | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
+| <a name="input_ssh_whitelist"></a> [ssh\_whitelist](#input\_ssh\_whitelist) | Whitelist IP for SSH connection to EC2 instance | `list(string)` | <pre>[<br/>  "0.0.0.0/0"<br/>]</pre> | no |
 
 ## Outputs
 
