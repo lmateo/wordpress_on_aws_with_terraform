@@ -1,35 +1,53 @@
 # wordpress-on-aws-with-terraform
-##### TODO
+
+## TODO
+
 - [ ] checkov
 - [ ] ludicrousdb
-##### Description
 
-This project is to create a high availability wordpress web-server on AWS base on Terraform - an IaC platform.<br>
+## Description
 
-##### Prerequisites
+This project deploys a highly available WordPress site on AWS using Terraform
+(Infrastructure as Code).
 
-- Terraform v1.2.2 or later <https://www.terraform.io/downloads/>
-- AWS CLI ver2 <https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html/>
-- Shell (SH), Powershell (if you are using Windows)
+## Prerequisites
 
-##### How to contribute
+- Terraform v1.2.2 or later: <https://www.terraform.io/downloads/>
+- AWS CLI version 2:
+  <https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html/>
+- Shell (sh) or PowerShell on Windows
 
-Please follow this [link](https://github.com/hiimtung/wordpress_on_aws_with_terraform/blob/main/howtocontribute.md)
+## How to contribute
 
-##### How to install & run
+Please see
+[how to contribute](https://github.com/hiimtung/wordpress_on_aws_with_terraform/blob/main/howtocontribute.md).
 
-- Install all prerequisites above
-- Deploy<br>
-    <code>cd ~/wordpress-on-aws-with-terraform/main</code><br>
-    <code>terraform init</code><br>
-    <code>terraform plan</code><br>
-    <code>terraform apply</code><br>
-- Destroy<br>
-    <code>terraform destroy</code>
-##### Architecture    
-![9c97a8390e9dccc3958c (1)_auto_x2](https://i.imgur.com/6aRdaTf.jpg)
-##### Directory structure
-```
+## How to install and run
+
+- Install all prerequisites above.
+
+- Deploy:
+
+  ```bash
+  cd ~/wordpress-on-aws-with-terraform/main
+  terraform init
+  terraform plan
+  terraform apply
+  ```
+
+- Destroy:
+
+  ```bash
+  terraform destroy
+  ```
+
+## Architecture
+
+![Architecture diagram](https://i.imgur.com/6aRdaTf.jpg)
+
+## Directory structure
+
+```text
 ├───📁 .github/
 │   └───📁 workflows/
 │       ├───📄 notify.yaml

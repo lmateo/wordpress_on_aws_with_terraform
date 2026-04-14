@@ -1,20 +1,25 @@
 name: notify
 on:
   pull_request:
-    branches:    
-    - main
+    branches:
+      - main
     types: [opened, reopened, review_requested, closed]
   pull_request_review:
-    branches:    
-    - main
-    types: submitted
+    branches:
+      - main
+    types: [submitted]
+
+concurrency:
+  group: notify-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pull-request-notify:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     name: Telegram PR Notify
     env:
-      map_users: > 
+      map_users: >
         {
           "kerashanog": "@kerashanog",
           "dtanhv1704": "@dtanhv1704",
@@ -28,33 +33,33 @@ jobs:
       - name: 'Check if PR has been opened/re-opened'
         id: opened
         if: github.event.action == 'opened' || github.event.action == 'reopened'
-        run: echo "::set-output name=status::opened"
+        run: echo "status=opened" >> "$GITHUB_OUTPUT"
       - name: 'Check if PR have been closed'
         id: closed
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
-        run: echo "::set-output name=status::closed" 
+        run: echo "status=closed" >> "$GITHUB_OUTPUT"
       - name: 'Check if PR have been merged'
         id: merged
-        if:  github.event.action == 'closed' && github.event.pull_request.merged == true
-        run: echo "::set-output name=status::merged"
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: echo "status=merged" >> "$GITHUB_OUTPUT"
       - name: 'Check if PR request reviewer'
         id: review
         if: github.event.action == 'review_requested'
         run: |
-          echo "::set-output name=status::requested review of"
-          echo "reviewer=${{ fromJSON(env.map_users)[join(github.event.pull_request.requested_reviewers[*].login, ', ')] }}" >> $GITHUB_ENV
+          echo "status=requested review of" >> "$GITHUB_OUTPUT"
+          echo "reviewer=${{ fromJSON(env.map_users)[join(github.event.pull_request.requested_reviewers[*].login, ', ')] }}" >> "$GITHUB_ENV"
       - name: Notify 🐧
         uses: hungran/telegram_notify_action@v1.2
         with:
           TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}  
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             🎉 **`${{ github.actor }}`** has been ${{join(steps.*.outputs.status, ' and ')}} ${{ env.reviewer }} a Pull Request 🍻
             Repository: ${{ github.repository }}
             Title: ${{ github.event.pull_request.title }} #${{ github.event.pull_request.number }}
             Link: ${{ github.event.pull_request.html_url }}
             Description: ${{ github.event.pull_request.body }}
-            
+
   pull-request-review:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request_review' }}
@@ -63,16 +68,16 @@ jobs:
       - name: 'Approved PR'
         id: approved
         if: github.event.action == 'submitted' && github.event.review.state == 'APPROVED'
-        run: echo "::set-output name=reviewed::APPROVED"
+        run: echo "reviewed=APPROVED" >> "$GITHUB_OUTPUT"
       - name: 'Request changed PR'
         id: request-changed
         if: github.event.action == 'submitted' && github.event.review.state == 'CHANGES_REQUESTED'
-        run: echo "::set-output name=reviewed::REQUESTED CHANGES"
+        run: echo "reviewed=REQUESTED CHANGES" >> "$GITHUB_OUTPUT"
       - name: Notify 🐧
         uses: hungran/telegram_notify_action@v1.2
         with:
           TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}    
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             🎉 **`${{ github.event.review.user.login }}`** has been ** ${{join(steps.*.outputs.reviewed, ' and ')}} ** on Pull Request 🍻
             Repository: ${{ github.repository }}

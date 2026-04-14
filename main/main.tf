@@ -1,21 +1,3 @@
-resource "random_string" "bar" {
-  length           = 16
-  special          = true
-  override_special = "/@£$"
-}
-
-resource "random_string" "foo" {
-  length           = 16
-  special          = true
-  override_special = "/@£$"
-}
-
-resource "random_string" "this" {
-  length           = 16
-  special          = true
-  override_special = "/@£$"
-}
-
 ### Supporting resource ####
 # Create Resource Group for Tagging and Management
 resource "aws_resourcegroups_group" "resource_group" {
@@ -177,6 +159,9 @@ module "s3_static" {
 
 module "cloudfront" {
   source = "../modules/cloudfront"
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
   #  use_acm = true # Default will be false, set to "True" if you want to use ACM 
   #  aliases = "cdn.cloud.forhandyman.com"
   #  route53_zone = "cloud.forhandyman.com" # Only use this option when `use_acm = true`

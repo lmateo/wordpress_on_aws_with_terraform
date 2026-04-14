@@ -3,7 +3,7 @@
 # Local .terraform directories
 **/.terraform/*
 **/.terraform
-.terraform.lock.hcl
+# Commit .terraform.lock.hcl for reproducible provider versions (do not ignore).
 # .tfstate files
 *.tfstate
 *.tfstate.*
